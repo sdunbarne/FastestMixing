@@ -1,14 +1,14 @@
 %%% -*-LaTeX-*-
-%%% fastest_mixing_new.tex.orig
+%%% fastestmixing.tex.orig
 %%% Prettyprinted by texpretty lex version 0.02 [21-May-2001]
-%%% on Thu Feb 18 09:10:25 2021
-%%% for Steven R. Dunbar (sdunbar@family-desktop)
+%%% on Fri Oct 28 09:58:58 2022
+%%% for Steve Dunbar (sdunbar@family-desktop)
 
 \documentclass[12pt]{article}
 
 \input{../../../../etc/macros}
-\input{../../../../etc/mzlatex_macros}
-%% \input{../../../../etc/pdf_macros}
+%% \input{../../../../etc/mzlatex_macros}
+\input{../../../../etc/pdf_macros}
 
 \bibliographystyle{plain}
 
@@ -43,7 +43,7 @@ Mathematicians Only:  prolonged scenes of intense rigor.
 
 If an irreducible aperiodic Markov chain is symmetric, that is,
 represented by a symmetric matrix, then what is the specific stationary
-distribution? What determines the rate at which the Markov chain
+distribution?  What determines the rate at which the Markov chain
 approaches the stationary distribution?
 
 \hr
@@ -108,15 +108,43 @@ approaches the stationary distribution?
 
 \hr
 
+\section*{Notation}
+\begin{enumerate}
+    \item
+        \( n \) -- number of nodes in the network
+    \item
+        \( i, j \) -- typical nodes in the network
+    \item
+        \( P_{ij} \) -- transition probability from \( i \) to \( j \)
+    \item
+        \( P \) -- transition probability matrix
+    \item
+        \( P_{1/2} \) -- tridiagonal transition probability matrix with
+        every entry \( 1/2 \).
+    \item
+        \( \vect{1} \) -- the \( n \times 1 \) vector whose entries are
+        all \( 1 \)
+    \item
+        \( 1 = \lambda_1 \ge \lambda_2 \ge \cdots \ge \lambda_n \ge -1 \)
+        -- the eigenvalues ordered by nonincreasing magnitude
+    \item
+        \( \mu(P) = \max_{i=2,\dots,n} | \lambda_i(P) | = \max(\lambda_2,
+        -\lambda_n) \) -- the mixing rate
+    \item
+        \( A^H \) -- conjugate transpose of matrix \( A \)
+    \item
+        \( \vect{u}^{(2)}, \dots \vect{u}^{(n)} \) -- the \( n-1 \)
+        eigenvectors of \( P \) corresponding to the eigenvalues \(
+        \lambda_2, \dots \lambda_n \)
+    \item
+        \( \vect{y}, \vect{z} \) -- vectors in \( \mathbb{R}^n \)
+    \item
+        \( s_{-}, s_{+} \) -- solutions of the quadratic characteristic
+        function.
+\end{enumerate}
+
 \visual{Mathematical Ideas}{../../../../CommonInformation/Lessons/mathematicalideas.png}
 \section*{Mathematical Ideas}
-
-This section is an in-depth investigation of the article:  ``Fastest
-Mixing Markov Chain on a Path'', by Stephen Boyd, Persi Diaconis, Jun
-Sun and Lin Xiao
-\cite{doi:10.1080/00029890.2006.11920281}.
-
-\subsection*{Introduction to Fastest Mixing Markov Chain}
 
 This section considers the problem of assigning transition probabilities
 to the edges of a simple linear network in such a way that the resulting
@@ -127,11 +155,13 @@ neighbor.  It is also equivalent to certain urn models.  The article
 proves the fastest mixing is obtained when each edge has a transition
 probability of \( 1/2 \).  This result is intuitive.
 
+\subsection*{Introduction, Motivation, Application}
+
 Consider a network (or mathematical graph) with \( n \ge 2 \) vertices,
 labeled \( 1,2, \dots n \) with \( n-1 \) edges connecting adjacent
 vertices and with a loop at each vertex, as in Figure~%
-\ref{fastestmixing:fig:mixing_graph}.  Consider the Markov chain, that
-is to say random walk, on this graph%
+\ref{fastestmixing:fig:mixing_graph}.  Consider the Markov chain, or
+random walk, on this graph%
 \index{random walk}%
 , with transition probability from vertex \( i \) to vertex \( j \)
 denoted \( P_{ij} \).  The requirement that transitions can occur only
@@ -226,23 +256,21 @@ nonincreasing magnitude
 is, the faster the Markov chain converges to its stationary
 distribution.
 
-\subsection*{Motivation and Application}
-
-The following is an application or a motivation for this Markov chain.
-A processor is located at each vertex of the graph.  Each edge
-represents a direct network connection between the adjacent processors.
-The processor can be a computer in a network or it can be human worker,
-such as a line of barbers or assemblers in a workshop.  The line has a
-constant total amount of work to be done.  Each processor has a job load
-or queue to finish, say processor \( i \) has load \( q_i (t) \) at time
-\( t \) where \( q_i(t) \) is a positive real number. The load balancing
-is done in steps before any processing or work begins, so the total
+The following is an application and motivation for this Markov chain. A
+processor is located at each vertex of the graph.  Each edge represents
+a direct network connection between the adjacent processors. The
+processor can be a computer in a network or it can be human worker, such
+as a line of assemblers in a workshop.  The line has a constant total
+amount of work to be done.  Each processor has a job load or queue to
+finish, say processor \( j \) has load \( q_j (t) \) at time \( t \)
+where \( q_j(t) \) is a positive real number.  The load balancing is
+done in steps \emph{before} any processing or work begins, so the total
 amount of work to be done is constant.  At each step, the goal is shift
-loads across the edges to balance the load.  In other words the goal is
-to have \( q_i(t) \to (1/n) \sum_i q_{i(0)} \) as fast as possible as \(
-t \to \infty \).  The results here show the balance can be accomplished
-fastest by shifting one-half of the load imbalance on each vertex from
-the more loaded to the less loaded processor.
+loads between adjacent vertices to balance the load.  In other words the
+goal is to have \( q_j(t) \to (1/n) \sum_j q_{j}(0) \) as fast as
+possible as \( t \to \infty \).  The results here show the balance can
+be accomplished fastest by shifting one-half of the load on each vertex
+to the adjacent vertices.
 
 \subsection*{Proofs about Fastest Mixing }
 
@@ -270,17 +298,15 @@ the more loaded to the less loaded processor.
             Note that \( \vect{1} \) is the eigenvector of \( P \)
             associated with the eigenvalue \( \lambda = 1 \) by
             equation~%
-            \eqref{fastestmixing:eq:eigenvalue_one}.  Also
-            \[
-                (1/n) \vect{1}\vect{1}^T \vect{1} = \vect{1}.
-            \]
+            \eqref{fastestmixing:eq:eigenvalue_one}.  Also \( (1/n)
+            \vect{1}\vect{1}^T \vect{1} = \vect{1} \).
         \item
             Let \( \vect{u}^{(2)}, \dots \vect{u}^{(n)} \) be the other \(
             n-1 \) eigenvectors of \( P \) corresponding to the
             eigenvalues \( \lambda_2, \dots \lambda_n \).  Because \( P \)
             is symmetric, the eigenvectors are orthogonal.  Taking the
             inner product of \( \vect{u}^{(j)} \) with eigenvector \(
-            \vect{1} \), observe that \( \sum_{i=1}^n u_i^{(j)} = 0 \)
+            \vect{1} \), observe that \( \sum_{\nu=1}^n u_\nu^{(j)} = 0 \)
             for \( j=2,\dots, n \).  Therefore
             \[
                 (1/n) \vect{1}\vect{1}^T \vect{u}^{(j)} = \vect{0}.
@@ -319,31 +345,30 @@ the more loaded to the less loaded processor.
     \begin{enumerate}
         \item
             Let the eigenvectors of \( P \) be \( \{ \vect{u}^{(1)} =
-            \vect{1}, \vect{u}^{(2)}, \dots \vect{u}^{(n)} \} \), and by
-            the Spectral Theorem be an orthonormal basis of \( \mathbb{R}^n
-            \).
+            \vect{1}, \vect{u}^{(2)}, \dots , \vect{u}^{(n)} \} \).  By
+            the Spectral Theorem these eigenvectors are an orthonormal
+            basis of \( \mathbb{R}^n \).
         \item
             Let \( \vect{y} \) be as specified in the hypotheses~%
             \eqref{fastestmixing:eq:orthogonal} and~%
             \eqref{fastestmixing:eq:normalize} and let
             \[
-                \vect{y} = \sum_{i=1}^{n} \alpha_i \vect{u}^{(i)}.
+                \vect{y} = \sum_{\nu=1}^{n} \alpha_\nu \vect{u}^{(\nu)}.
             \]
         \item
             By hypothesis~%
             \eqref{fastestmixing:eq:normalize}, \( \| \vect{y} \|_2 =
-            \sqrt{\sum_{i=1}^n \alpha_i^2 } = 1 \).
+            \sqrt{\sum_{\nu=1}^n \alpha_\nu^2 } = 1 \).
         \item
-            By using the orthogonality of \( \vect{1} \) and \( \vect {u}^
-            {(i)} \) for \( i = 2, \dots, n \), the eigenvalues of \( P
-            - (1/n)\vect{1}\vect{1}^T \) are \( \lambda_1 = 0, \lambda_2,
-            \dots \lambda_n \) with eigenvectors \( \vect{1}, \vect{u}^{%
+            The eigenvalues of \( P - (1/n)\vect{1}\vect{1}^T \) are \(
+            \lambda_1 = 0, \lambda_2, \dots \lambda_n \) with
+            eigenvectors \( \vect{1}, \vect{u}^{%
             (2)}, \dots, \vect{u}^{(n)} \) so
             \[
-                (P - (1/n)\vect{1}\vect{1}^T) \left( \sum_{i=1}^n \alpha_i
-                \vect {u}^ {(i)} \right) = \sum_{i=1}^n \alpha_i \lambda_i
-                \vect{u}^{(i)} = \sum_{i=2}^n \alpha_i \lambda_i \vect{u}^
-                {(i)}.
+                (P - (1/n)\vect{1}\vect{1}^T) \left( \sum_{\nu=1}^n
+                \alpha_\nu \vect {u}^ {(\nu)} \right) = \sum_{\nu=1}^n
+                \alpha_\nu \lambda_\nu \vect{u}^{(\nu)} = \sum_{\nu=2}^n
+                \alpha_\nu \lambda_\nu \vect{u}^ {(\nu)}.
             \] The last sum on the right side intentionally starts at \(
             2 \) because the first eigenvalue is \( 0 \).
         \item
@@ -357,8 +382,9 @@ the more loaded to the less loaded processor.
                 \|=1} \| (P - (1/n)\vect{1}\vect{1}^T) \vect{w}\|_2.
             \]
         \item
-            Specializing to the vector \( \vect{y} \) with \( \| \vect{y}
-            \|_2 = 1 \) and using the definition of the 2-norm
+            \label{fastestmixing:enum:stepsix} Specializing to the
+            vector \( \vect{y} \) with \( \| \vect{y} \|_2 = 1 \) and
+            using the definition of the 2-norm
             \begin{align*}
                 & \max_{\|\vect{w} \|=1} \| (P - (1/n)\vect{1}\vect{1}^T)
                 \vect{w}\|_2 \\
@@ -366,29 +392,30 @@ the more loaded to the less loaded processor.
                 \\
                 &\quad = \sqrt{\vect{y}^T (P - (1/n)\vect{1}\vect{1}^T)^T
                 (P - (1/n)\vect {1}\vect{1}^T) \vect{y} } \\
-                &\quad = \sqrt{\left( \sum_{i=1}^n \alpha_i \vect{u}^{(i)}
-                \right)^T (P - (1/n)\vect{1}\vect{1}^T)^T (P - (1/n)\vect
-                {1}\vect {1}^T) \left( \sum_{i=1}^n \alpha_i \vect{u}^{(i)}
-                \right)} \\
-                &\quad = \sqrt{\left( \sum_{i=1}^n \alpha_i \lambda_i
-                \vect{u}^ {(i)} \right)^T \left( \sum_{i=1}^n \alpha_i
-                \lambda_i \vect{u}^ {(i)} \right)} \\
-                &\quad = \sqrt{\sum_{i=1}^n \alpha_i^2 \lambda_i^2}.
+                &\quad = \sqrt{\left( \sum_{\nu=1}^n \alpha_\nu \vect{u}^
+                {(\nu)} \right)^T (P - (1/n)\vect{1}\vect{1}^T)^T (P - (1/n)\vect
+                {1}\vect {1}^T) \left( \sum_{\nu=1}^n \alpha_\nu \vect{u}^
+                {(\nu)} \right)} \\
+                &\quad = \sqrt{\left( \sum_{\nu=1}^n \alpha_\nu \lambda_\nu
+                \vect{u}^ {(\nu)} \right)^T \left( \sum_{\nu=1}^n \alpha_\nu
+                \lambda_\nu \vect{u}^ {(\nu)} \right)} \\
+                &\quad = \sqrt{\sum_{\nu=1}^n \alpha_\nu^2 \lambda_\nu^2}.
             \end{align*}
         \item
             Apply Jensen's Inequality to the concave down function \(
             \sqrt{\cdot} \) over the convex combination defined by \(
-            \alpha_i^2 \) which has \( \sum_{i=1}^n \alpha_i^2 = 1 \)
-            \begin{align*}
-                \sqrt{\sum_{i=1}^n \alpha_i^2 \lambda_i^2} &\ge \sum_{i=1}^n
-                \alpha_i^2 | \lambda_i | \\
-                &\ge \sum_{i=1}^n \alpha_i^2 \lambda_i.
-            \end{align*}
+            \alpha_i^2 \) which has \( \sum_{i=1}^n \alpha_i^2 = \|
+            \vect{y} \|_2 = 1 \)
+            \[
+                \sqrt{\sum_{i=1}^n \alpha_i^2 \lambda_i^2} \ge \sum_{i=1}^n
+                \alpha_i^2 | \lambda_i | \ge \sum_{i=1}^n \alpha_i^2
+                \lambda_i.
+            \]
         \item
             Now unwind the expression back into vector notation, again
             using the orthogonality of the eigenvectors
             \begin{align*}
-                \sum_{i=1}^n \alpha_i^2 \lambda_i &= \left( \sum_{i=1}^n
+                \sum_{\nu=1}^n \alpha_\nu^2 \lambda_\nu &= \left( \sum_{i=1}^n
                 \alpha_i \vect{u}^{(i)} \right)^T (P - (1/n)\vect {1}\vect
                 {1}^T) \left( \sum_{i=1}^n \alpha_i \vect{u}^{(i)}
                 \right) \\
@@ -397,7 +424,8 @@ the more loaded to the less loaded processor.
                 &= \sum_{i,j} P_{ij} y_i y_j.
             \end{align*}
         \item
-            Now use the hypothesis~%
+            Now use the first inequality in step~%
+            \ref{fastestmixing:enum:stepsix} and hypothesis~%
             \eqref{fastestmixing:eq:inequality}
             \begin{align*}
                 \sum_{i,j} P_{ij} y_i y_j &\ge \sum_{i,j}(1/2)(z_i + z_j)P_
@@ -406,7 +434,8 @@ the more loaded to the less loaded processor.
                 ) \\
                 &= \vect{1}^T \vect{z}.
             \end{align*}
-            This establishes the lemma.
+            The second equality follows from the fact that \( P \) is
+            doubly-stochastic.  This establishes the lemma.
     \end{enumerate}
 \end{proof}
 
@@ -427,7 +456,7 @@ the more loaded to the less loaded processor.
 \end{lemma}
 
 \begin{remark}
-    The following proof is adapted from Feller
+    The following proof is adapted from Feller~%
     \cite[Section XVI.4]{feller73}.  In fact, Feller finds the
     eigenvalues and eigenvectors for the more general tridiagonal matrix
     \[
@@ -503,7 +532,7 @@ the more loaded to the less loaded processor.
         \item
             Combining these equations \( s_{+}^{n} = s_{-}^{n} \).  Note
             that \( s_{+}s_{-} =1 \), so \( s_{+}^{2n} = 1 \) and \( s_{-}^
-            {2n} = 1 \). That is, both \( s_{+} \) and \( s_{-} \) are \(
+            {2n} = 1 \).  That is, both \( s_{+} \) and \( s_{-} \) are \(
             2n \)th roots of unity.  Therefore, \( s_{+} \) and \( s_{-}
             \) can be written in the form
             \[
@@ -511,7 +540,7 @@ the more loaded to the less loaded processor.
                 + \I \sin\left( \frac{ \pi j}{n} \right)
             \] for \( j = 0, 1, 2, \dots, 2n-1 \).
         \item
-            Thus, the eigenvalues \( \lambda \)must be a solution of
+            Thus, the eigenvalues \( \lambda \) must be a solution of
             \[
                 s_{+}(\lambda) = \EulerE^{\I \pi j/n}
             \] or
@@ -531,17 +560,16 @@ the more loaded to the less loaded processor.
                 \cos{\pi j/n } &= \lambda.  \\
             \end{align*}
         \item
-            So to each \( j \) we can find a root \( \lambda_j \),
-            namely
+            So to each \( j \) there is a root \( \lambda_j \), namely
             \[
                 \lambda_j = \cos( \pi j/n ) \qquad j = 0,1,2, \dots,
                 2n-1.
             \] However, some of these roots are repeated, since
             \[
                 \cos( \pi j/n ) = \cos( \pi (2n-j)/n )
-            \] for \( j = 1, \dots, n \).  The \( n \)
-            eigenvalues are \( \lambda_1 = 1 \) and \( \lambda_j = \cos\left
-            ( \frac{(j-1) \pi}{n} \right) \) for \( j=2, \dots, n \).
+            \] for \( j = 1, \dots, n \).  The \( n \) eigenvalues are \(
+            \lambda_1 = 1 \) and \( \lambda_j = \cos\left( \frac{(j-1)
+            \pi}{n} \right) \) for \( j=2, \dots, n \).
     \end{enumerate}
 \end{proof}
 
@@ -562,12 +590,13 @@ the more loaded to the less loaded processor.
         \item
             In the special case \( j=2 \)
             \[
-                \sum_{\ell=1}^{n} \cos((2 \ell-1)(j-1)\pi/n) = 0.
+                \sum_{\ell=1}^{n} \cos((2 \ell-1)\pi/n) = 0.
             \]
         \item
             For an integer \( j \)
             \[
-                \sum_{\ell=1}^{n} \cos^2((2 \ell-1)(j-1)\pi/(2n)) = 0.
+                \sum_{\ell=1}^{n} \cos^2((2 \ell-1)(j-1)\pi/(2n)) =
+                \frac{n}{2}.
             \]
     \end{enumerate}
 \end{lemma}
@@ -576,25 +605,25 @@ the more loaded to the less loaded processor.
     \begin{enumerate}
         \item
             \begin{align*}
-              &\sum_{\ell=1}^{n} \cos((2\ell-1)(j-1)\pi/n) \\
-              &\quad =  \Re \left
-                ( \sum_{\ell=1}^n \exp (\I (2\ell-1)(j-1)\pi/n) \right)
-                \\
-                &\quad =  \Re \left( \sum_{\ell=1}^n \exp(2\ell(j-1)\pi\I /n)
-                \exp(-\I (j-1)\pi/n) \right) \\
-                &\quad =  \Re \left( \exp(-\I(j-1)\pi/n) \sum_{\ell=1}^n \exp(2
-                (j-1)\pi \I/n)^\ell \right) \\
-                &\quad =  \Re \left( \exp(-\I(j-1)\pi/n) \exp( 2 (j-1)\pi \I/n)
-                \sum_{\ell=1}^{n} \exp( 2 (j-1)\pi \I/n)^{\ell-1} \right)
-                \\
-                &\quad =  \Re \left( \exp(-(j-1)\pi\I/n) \exp(2 (j-1)\pi \I/n)
-                \sum_{\ell=0}^{n-1} \exp( 2 (j-1)\pi \I/n)^{\ell} \right)
-                \\
-                &\quad =  \Re \left( \exp(\I (j-1)\pi/n) \frac{1 - \exp( 2 (j-1)\pi
-                \I /n)^n}{1 - \exp ( 2(j-1)\pi \I/n)} \right) \\
-                &\quad =  \Re \left( \exp(\I (j-1)\pi/n) \frac{1 - \exp(2 (j-1)\pi
-                \I)}{1 - \exp(2 (j-1)\pi \I/n)} \right) \\
-                &\quad =  0.
+                &\sum_{\ell=1}^{n} \cos((2\ell-1)(j-1)\pi/n) \\
+                &\quad = \Re \left ( \sum_{\ell=1}^n \exp (\I (2\ell-1)(j-1)\pi/n)
+                \right) \\
+                &\quad = \Re \left( \sum_{\ell=1}^n \exp(2\ell(j-1)\pi\I
+                /n) \exp(-\I (j-1)\pi/n) \right) \\
+                &\quad = \Re \left( \exp(-\I(j-1)\pi/n) \sum_{\ell=1}^n
+                \left[ \exp(2 (j-1)\pi \I/n) \right]^\ell \right) \\
+                &\quad = \Re \left( \exp(-\I(j-1)\pi/n) \exp( 2 (j-1)\pi
+                \I/n) \sum_{\ell=1}^{n} \left[ \exp( 2 (j-1)\pi \I/n)
+                \right]^{\ell-1} \right) \\
+                &\quad = \Re \left( \exp(-(j-1)\pi\I/n) \exp(2 (j-1)\pi
+                \I/n) \sum_{\ell=0}^{n-1} \left[ \exp( 2 (j-1)\pi \I/n)
+                \right]^{\ell} \right) \\
+                &\quad = \Re \left( \exp(\I (j-1)\pi/n) \frac{1 - \left[
+                \exp( 2 (j-1)\pi \I /n) \right]^n}{1 - \exp ( 2(j-1)\pi
+                \I/n)} \right) \\
+                &\quad = \Re \left( \exp(\I (j-1)\pi/n) \frac{1 - \exp(2
+                (j-1)\pi \I)}{1 - \exp(2 (j-1)\pi \I/n)} \right) \\
+                &\quad = 0.
             \end{align*}
         \item
             This is an immediate corollary of the previous with \( j=2 \).
@@ -637,7 +666,7 @@ the more loaded to the less loaded processor.
             that for \( \lambda_1 = 1 \), the corresponding normalized
             eigenvector is \( \vect{u}^{(1)} = \frac{1}{\sqrt{n}}\vect{1}
             \).
-
+        \item
             For \( j \ge 2 \), \( \lambda_j = \cos\left( \frac{(j-1) \pi}
             {n} \right) \).  The proof of Lemma~%
             \ref{fastestmixing:lemma:three} shows the corresponding
@@ -645,12 +674,13 @@ the more loaded to the less loaded processor.
             \[
                 u^{(j)}_k = A(\lambda_j) s_{+}^k(\lambda_j) + B(\lambda_j)s_
                 {-}^k(\lambda_j)
-            \] where \( s_{\pm}(\lambda_j) = \lambda_j \pm \sqrt{\lambda^2
+            \] where \( s_{\pm}(\lambda_j) = \lambda_j \pm \sqrt{\lambda_j^2
             - 1} = \cos((j-1) \pi/n) \pm \I \sin((j-1) \pi/n) = \EulerE^
-            {\pm (j-1) \pi \I} \).  The coefficients \( A(\lambda_j) \)
-            and \( B(\lambda_j) \) are determined from the boundary
-            conditions~%
-            \eqref{fastestmixing:eq:bcleft} and%
+            {\pm (j-1) \pi \I} \).
+        \item
+            The coefficients \( A(\lambda_j) \) and \( B(\lambda_j) \)
+            are determined from the boundary conditions~%
+            \eqref{fastestmixing:eq:bcleft} and~%
             \eqref{fastestmixing:eq:bcright}.  But since
             \[
                 u^{(j)}_k = A(\lambda_j) \left[ s_{+}^k(\lambda_j) +
@@ -659,14 +689,15 @@ the more loaded to the less loaded processor.
             \] and any scalar multiple of an eigenvector is an
             eigenvector, only the ratio \( \frac{B(\lambda_j)}{A(\lambda_j)}
             \) is needed.
-
+        \item
             For notational simplicity, temporarily drop the dependence
-            of \( s_{\pm} \) on \( \lambda_j \). Expanding~\eqref{fastestmixing:eq:bcleft}
+            of \( s_{\pm} \) on \( \lambda_j \).  Expanding~\eqref{fastestmixing:eq:bcleft}
             \[
                 2\lambda A s_+ + 2 \lambda B s_{-} = A s_+ + B s_- + A s_+^2
                 + B s_-^2.
-            \] Rearranging and using \( s_{\pm}^2 - 2\lambda s_{\pm} =
-            -1 \)
+            \]
+        \item
+            Rearranging and using \( s_{\pm}^2 - 2\lambda s_{\pm} = -1 \)
             \[
                 \frac{B}{A} = - \frac{s_+ - 1}{s_- - 1}
             \] and the components of the unnormalized eigenvector are
@@ -681,7 +712,7 @@ the more loaded to the less loaded processor.
                 - 1} - \frac{s_-^k(\lambda_j)}{s_-(\lambda_j) - 1}
                 \right].
             \]
-
+        \item
             Recalling \( s_{\pm}(\lambda_j) = \EulerE^{\pm \I (j-1)\pi/n}
             \), each fraction can be simplified by multiplying numerator
             and denominator by the complex conjugate of the denominator
@@ -691,9 +722,13 @@ the more loaded to the less loaded processor.
                 {\EulerE^{\mp \I (j-1) \pi/n} - 1} = \frac{\EulerE^{\pm
                 \I \pi (j-1) (k-1)/n} - \EulerE^{\pm \I \pi (j-1) k/n}}{2-
                 2\cos(\pi/n)}
-            \] Once again remembering that any scalar multiple of an
+            \]
+        \item
+            Once again remembering that any scalar multiple of an
             eigenvector is an eigenvector, the constant \( 2- 2\cos(\pi/n)
-            \) in the denominator can be ignored.  This leaves
+            \) in the denominator can be ignored.
+        \item
+            This leaves
             \begin{align*}
                 u_k^{(j)} &= (\EulerE^{+ \I (j-1)(k-1)\pi/n} - \EulerE^{-
                 \I \pi (j-1)(k-1)/n}) - (\EulerE^{+ \I (j-1) k \pi /n} -
@@ -702,13 +737,14 @@ the more loaded to the less loaded processor.
                 &= 4 \sin( (j-1) (-1) \pi/(2n)) \cos((j-1) (2k-1) \pi /(2n)
                 ).
             \end{align*}
+        \item
             Finally, factoring out the constant \( -4 \sin( (j-1)\pi/(2n))
             \), the \( k \)th component of the eigenvector corresponding
             to \( \lambda_j \) is
             \[
                 u^{(j)}_k = \cos\left( \frac{(2k-1)(j-1)\pi}{2n} \right).
             \]
-
+        \item
             Using Lemma~%
             \ref{fastestmixing:lemma:cossum}, the norm is \( \sqrt{n/2} \)
             and the \( k \)th component of the normalized eigenvector
@@ -783,8 +819,7 @@ label("$1/2$", (z3+z2)/2, 1.5N);
 label("$1/2$", (znm2+znm1)/2, 1.5N);
 label("$1/2$", (zn+znm1)/2, 1.5N+0.1E);
 \end{asy}
-    \caption{The random walk graph with fastest 
-    mixing.%
+    \caption{The random walk graph with fastest mixing.%
     \label{fastestmixing:fig:fastest_mixing_graph}}
 \end{figure}
 
@@ -794,16 +829,16 @@ label("$1/2$", (zn+znm1)/2, 1.5N+0.1E);
             The proof proceeds by constructing a pair of vectors \(
             \vect{y} \) and \( \vect{z} \) that satisfy the assumptions
             of Lemma~%
-            \ref{fastestmixing:lemma:two} for any symmetric
-            tridiagonal stochastic matrix \( P \).  Furthermore, \(
-            \vect{1}^T \vect{z} = \cos(\pi/n) \), so the mixing rate \(
-            \mu(P_{1/2}) = \cos(\pi/n) \) is the fastest possible.
+            \ref{fastestmixing:lemma:two} for any symmetric tridiagonal
+            stochastic matrix \( P \).  Furthermore, \( \vect{1}^T \vect
+            {z} = \cos(\pi/n) \), so the mixing rate \( \mu(P_{1/2}) =
+            \cos(\pi/n) \) is the fastest possible.
         \item
             By Lemma~%
             \ref{fastestmixing:lemma:three} and the definition of the
             mixing rate
             \[
-                \mu(P_{1/2}) = \lambda_2 = \lambda_n = \cos(\pi/n).
+                \mu(P_{1/2}) = \lambda_2 = -\lambda_n = \cos(\pi/n).
             \] Take \( \vect{y} = \vect{u}^{(2)} \), the normalized
             eigenvector of \( P_{1/2} \) corresponding to \( \lambda_2 \),
             so the assumptions~%
@@ -829,10 +864,10 @@ label("$1/2$", (zn+znm1)/2, 1.5N+0.1E);
             \eqref{fastestmixing:eq:inequality} of Lemma~%
             \ref{fastestmixing:lemma:two}.
             \begin{multline*}
-              \frac{z_j + z_{j+1}}{2} = \\
-              \frac{1}{n} \left[ \cos\left(\frac
-                {\pi} {n}\right) + \frac{1}{2} \left( \cos\left( \frac{(2j-1)\pi
-                }{n } \right) + \cos\left( \frac{(2j+1)\pi }{n } \right)
+                \frac{z_j + z_{j+1}}{2} = \\
+                \frac{1}{n} \left[ \cos\left(\frac {\pi} {n}\right) +
+                \frac{1}{2} \left( \cos\left( \frac{(2j-1)\pi }{n }
+                \right) + \cos\left( \frac{(2j+1)\pi }{n } \right)
                 \right) \bigg/ \cos\left(\pi/n \right) \right].
             \end{multline*}
         \item
@@ -854,7 +889,8 @@ label("$1/2$", (zn+znm1)/2, 1.5N+0.1E);
                 \frac{1}{n} \left[ \cos\left( \frac{\pi}{n} \right) +
                 \cos\left( \frac{2j\pi}{n} \right) \right] = \frac{2}{n}
                 \cos\left( \frac{(2j-1) \pi }{2n} \right) \cos\left(
-                \frac{(2j+1) \pi }{2n} \right) \\ = y_{j} y_{j+1}.
+                \frac{(2j+1) \pi }{2n} \right) \\
+                = y_{j} y_{j+1}.
             \end{multline*}
         \item
             Therefore \emph{equality} in inequality~%
@@ -872,7 +908,7 @@ label("$1/2$", (zn+znm1)/2, 1.5N+0.1E);
             \[
                 2 \cos^2\left( \frac{(2j-1)\pi}{n} \right) = 1 + \cos\left
                 ( \frac{(2j-1)\pi}{2n} \right).
-            \] Therefore,
+            \] Therefore, the following inequality needs to be checked
             \[
                 \cos\left( \frac{\pi}{n} \right) + \cos\left( \frac{(2j-1)\pi}
                 {n} \right) \bigg/ \cos\left( \frac{\pi}{n} \right) \le
@@ -886,7 +922,7 @@ label("$1/2$", (zn+znm1)/2, 1.5N+0.1E);
                 \right)+ \cos\left( \frac{(2j-1)\pi}{n} \right) \ge 0.
             \]
         \item
-            This can be factored as
+            The left side can be factored as
             \[
                 \left[ 1 - \cos\left( \frac{\pi}{n} \right) \right]
                 \left[ 1 - \cos\left( \frac{(2j-1)\pi}{n} \right) \bigg/
@@ -944,35 +980,45 @@ Xiao
 
 \begin{exercise}
     Show that balancing the workload of a line of processors by shifting
-    one-half of the load imbalance on each vertex from the more loaded
-    to the less loaded processor can be represented by the tridiagonal
-    matrix \( P_{1/2} \).
+    one-half of the load on each vertex from the more loaded to the less
+    loaded processor can be represented by the tridiagonal matrix \( P_{1/2}
+    \).
 \end{exercise}
 \begin{solution}
     Consider a representative node \( j \) with \( 1 \le j \le n-1 \)
     with load \( q_j \) and neighboring node with load \( q_{j+1} \).
-    After one Markov chain step by \( P_{1/2} \) of load exchange
-    between \( i \) and \( i+1 \) the expected gain would be \( \frac{1}
-    {2} q_{j+1} - \frac{1}{2} q_{j} \).  If \( q_{j+1} > q_j \), the
-    gain is positive, one-half of the load imbalance shifts from \( j+1 \)
-    to \( j \).  If \( q_{j+1} < q_j \), the gain is negative, one-half
-    of the load imbalance shifts from \( j \) to \( j+1 \).  For the end
-    node \( n \), the calculation is similar.
+    After one Markov chain step by \( P_{1/2} \) of load exchange the
+    expected gain would be \( \frac{1} {2} q_{j+1} - \frac{1}{2} q_{j} \).
+    If \( q_{j+1} > q_j \), the gain is positive, one-half of the load
+    imbalance shifts from \( j+1 \) to \( j \).  If \( q_{j+1} < q_j \),
+    the gain is negative, one-half of the load imbalance shifts from \(
+    j \) to \( j+1 \).  For the end node \( n \), the calculation is
+    similar.
 \end{solution}
 
 \begin{exercise}
-    Devise the exchange rules for an urn model with the transition
-    probability matrix \( P_{p} \).
+    Show that \( (1/n) \vect{1}\vect{1}^T \vect{1} = \vect{1} \).
 \end{exercise}
 \begin{solution}
-    There are two urns I and II containing a total of \( n \) balls.
-    The state of the Markov chain is the number of balls in urn I so the
+    The matrix \( \vect{1}\vect{1}^T \) has \( 1 \) in every entry. The
+    matrix-vector product \( \vect{1}\vect{1}^T \vect{1} \) sums the
+    rows, giving \( n \vect{1} \), then \( (1/n) \vect{1}\vect{1}^T
+    \vect{1} = \vect{1} \).
+\end{solution}
+
+\begin{exercise}
+    Devise the exchange rules for an urn model with the \( n \times n \)
+    transition probability matrix \( P_{p} \).
+\end{exercise}
+\begin{solution}
+    There are two urns I and II containing a total of \( n \) balls. The
+    state of the Markov chain is the number of balls in urn I so the
     number of states is \( n+1 \).  At each turn, with probability \( p \)
-    a ball is selected from urn II and moved to urn I or with
-    complementary probability \( q \) a ball is moved from urn I to urn
-    II\@. If there are no balls in urn I then with probability \( q \)
-    urn I stays empty.  Similarly for the last state if urn I has all \(
-    n \) balls.
+    a ball is taken from urn II and moved to urn I or with complementary
+    probability \( q \) a ball is moved from urn I to urn II\@.  If
+    there are no balls in urn I then with probability \( q \) urn I
+    stays empty.  Similarly for the last state if urn I has all \( n \)
+    balls.
 \end{solution}
 \begin{exercise}
     Show that
@@ -998,8 +1044,7 @@ Xiao
         \cos\left( \frac{(2j+1)\pi }{n } \right) \right) \\
         &\qquad = \cos\left( \frac{1}{2} \left[ \frac{(2j-1)\pi}{n} +
         \frac{(2j+1)\pi}{n}\right] \right) \cos\left( \frac{1}{2} \left[
-        \frac{(2j-1)\pi}{n} - \frac{(2j+1)\pi}{n}\right]\right)\cos\left
-        (\frac{2j\pi}{n}\right)\\
+        \frac{(2j-1)\pi}{n} - \frac{(2j+1)\pi}{n}\right]\right)\\
         &\qquad = \cos\left( \frac{\pi}{n} \right) \cos\left( \frac{2 j
         \pi}{n} \right)
     \end{align*}
@@ -1009,8 +1054,7 @@ Xiao
         ( \frac{2j\pi}{n} \right) \right] \\
         &\qquad = \frac{2}{n} \cos\left( \frac{1}{2} \left[ \frac{2j\pi}
         {n} + \frac{\pi}{n}\right] \right) \cos\left( \frac{1}{2} \left[
-        \frac{2j\pi}{n} - \frac{\pi}{n}\right]\right) \cos\left(\frac{2j\pi}
-        {n}\right)\\
+        \frac{2j\pi}{n} - \frac{\pi}{n}\right]\right) \\
         &\qquad = \frac{2}{n} \cos\left( \frac{(2j - 1) \pi }{2n} \right)
         \cos\left( \frac{(2j+1) \pi }{2n} \right).
     \end{align*}
@@ -1092,7 +1136,7 @@ Xiao
     These are all equivalent to \( \lambda s = q + p s^2 \), or \( p s^2
     - \lambda s + q = 0 \), so the solutions are \( s_{+} = \frac{\lambda
     + \sqrt{\lambda^2 - 4pq}}{2p} \) and \( s_{-} = \frac{\lambda -
-    \sqrt{\lambda^2 - 4pq}}{2p} \). Then the solution is of the form
+    \sqrt{\lambda^2 - 4pq}}{2p} \).  Then the solution is of the form
     \begin{align*}
         u_1 &= A(\lambda) s_{+} + B(\lambda) s_{-} \\
         u_2 &= A(\lambda) s_{+}^2 + B(\lambda) s_{-}^2 \\
@@ -1126,15 +1170,15 @@ Xiao
     \[
         s_{+}^n = s_{-}^n.
     \] Note that \( s_{+}s_{-} =q/p \) so \( s_{+}^{2n} = (q/p)^n \) and
-    \( s_{-}^{2n} = (q/p)^n \). That is, both \( s_{+} \) and \( s_{-} \)
+    \( s_{-}^{2n} = (q/p)^n \).  That is, both \( s_{+} \) and \( s_{-} \)
     are \( (2n) \)th roots of \( (q/p)^n \).  Therefore, \( s_{+} \) and
     \( s_{-} \) can be written in the form
     \[
-        \EulerE^{\I \pi j/n} = \sqrt{q/n} \left( \cos\left( \frac{ \pi j}
+        \EulerE^{\I \pi j/n} = \sqrt{q/p} \left( \cos\left( \frac{ \pi j}
         {n} \right) + \I \sin\left( \frac{\pi j}{n} \right) \right)
     \] for \( j = 0, 1, 2, \dots, 2n-1 \).
 
-    Thus, the eigenvalues \( \lambda \) be among the solutions of
+    Thus, the eigenvalues \( \lambda \) are among the solutions of
     \[
         s_{+}(\lambda) = \sqrt{q/p} \EulerE^{\I \pi j/n}
     \] or
@@ -1154,7 +1198,7 @@ Xiao
         {\I \pi j/n}}{2} \right) &= \lambda \\
         \sqrt{4pq} \cos{\pi j/n } &= \lambda.  \\
     \end{align*}
-    So to each \( j \) we can find a root \( \lambda_j \), namely
+    So to each \( j \) there is a root \( \lambda_j \), namely
     \[
         \lambda_j = \sqrt{4pq} \cos( \pi j/n ) \qquad j = 0,1,2, \dots,
         2n-1.
@@ -1227,28 +1271,4 @@ for (n in 2:8) {
 Last modified:  \flastmod
 
 \end{document}
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:
-
-File name                  : fastestmixing.tex
-Number of characters       : 47285
-Number of words            : 4405
-Percent of complex words   : 15.26
-Average syllables per word : 1.6772
-Number of sentences        : 110
-Average words per sentence : 40.0455
-Number of text lines       : 1025
-Number of blank lines      : 206
-Number of paragraphs       : 198
-
-
-READABILITY INDICES
-
-Fog                        : 22.1203
-Flesch                     : 24.2990
-Flesch-Kincaid             : 19.8185
-
 
